@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kami · Protein & Leucine Plan</title>
+<meta name="description" content="A plant-forward meal-prep plan tuned for Kami on Wegovy: ~90g protein a day across three feedings, each clearing the leucine threshold to hold muscle and protect hair. Includes an interactive daily builder.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kami · Protein & Leucine Plan">
+<meta property="og:description" content="~90g protein a day across three feedings, each clearing the leucine threshold — a plant-forward plan to hold muscle and protect hair on Wegovy. Interactive daily builder included.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kami · Protein & Leucine Plan">
+<meta name="twitter:description" content="Plant-forward, leucine-first meal prep on a GLP-1. Three feedings, ~90g protein, interactive builder.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%BF%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#13201A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kami's Plan">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#13201A;          /* deep herb-black */
+    --ink-2:#1C2C24;        /* panel */
+    --paper:#F3EFE4;        /* warm off-white */
+    --paper-dim:#E6E0D0;
+    --herb:#3C7A50;         /* complete / cleared green */
+    --herb-soft:#6FA579;
+    --lemon:#E8B53A;        /* citrus / honey accent */
+    --clay:#B5613A;         /* legume accent */
+    --muted:#93A08C;
+    --muted-ink:#9DB0A0;
+    --line:rgba(243,239,228,.14);
+    --shadow:0 18px 40px -22px rgba(0,0,0,.55);
+    --ease:cubic-bezier(.2,.9,.25,1.1);  /* one shared authored spring curve */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--ink);color:var(--paper);
+    font-family:'Inter',system-ui,sans-serif;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+  }
+  /* static baked feTurbulence grain — one fixed soft-light overlay, never animated */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;
+    opacity:.035;mix-blend-mode:soft-light;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px}
+  .mono{font-family:'Space Mono',monospace}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.05;margin:0}
+
+  /* ---------- HERO ---------- */
+  header{padding:64px 0 40px;border-bottom:1px solid var(--line);
+    position:relative;overflow:hidden}
+  header .wrap{position:relative;z-index:2}
+  /* drifting 3-blob mesh — transform/opacity only, capped 40s */
+  .mesh{position:absolute;inset:-20% -10%;z-index:0;pointer-events:none;overflow:hidden}
+  .mesh b{position:absolute;border-radius:50%;filter:blur(46px);opacity:.06;
+    will-change:transform,opacity}
+  .mesh .b1{width:46vw;height:46vw;left:-6%;top:-8%;background:var(--ink-2);
+    animation:drift1 40s var(--ease) infinite alternate}
+  .mesh .b2{width:40vw;height:40vw;right:-8%;top:18%;background:var(--herb);
+    animation:drift2 40s var(--ease) infinite alternate}
+  .mesh .b3{width:34vw;height:34vw;left:24%;bottom:-14%;background:var(--ink-2);
+    animation:drift3 40s var(--ease) infinite alternate}
+  @keyframes drift1{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(6%,4%,0) scale(1.12)}}
+  @keyframes drift2{from{transform:translate3d(0,0,0) scale(1);opacity:.05}to{transform:translate3d(-5%,6%,0) scale(1.08);opacity:.08}}
+  @keyframes drift3{from{transform:translate3d(0,0,0) scale(1.05)}to{transform:translate3d(4%,-5%,0) scale(.94)}}
+  /* ghost "90" watermark — depth, no new hue */
+  .ghost90{position:absolute;z-index:1;top:50%;right:-6%;transform:translateY(-50%);
+    font-family:'Fraunces',Georgia,serif;font-weight:600;
+    font-size:38vw;line-height:.8;color:var(--ink-2);opacity:.06;
+    letter-spacing:-.04em;pointer-events:none;user-select:none;
+    font-variation-settings:"opsz" 144,"wght" 600}
+  /* hand-inked botanical sprig — maker's mark, bleeds off top-right */
+  .sprig{position:absolute;z-index:1;top:-58px;right:-40px;width:300px;height:300px;
+    pointer-events:none;opacity:.12}
+  .sprig path,.sprig .leaf{fill:none;stroke:var(--herb-soft);stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round}
+  .sprig .seed{fill:var(--clay);stroke:none;opacity:.9}
+  .eyebrow-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    margin:0 0 18px;flex-wrap:wrap}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--lemon);margin:0}
+  .kicker{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.26em;
+    text-transform:uppercase;color:var(--muted);margin:0;white-space:nowrap}
+  /* H1 lines — each animates "ink drying": opsz/wght + rise + blur */
+  h1{font-size:clamp(40px,9vw,72px);letter-spacing:-.01em;
+    font-variation-settings:"opsz" 72,"wght" 600}
+  h1 .line{display:block}
+  h1 .ninety{display:block;font-size:clamp(64px,22vw,168px);line-height:.9;
+    letter-spacing:-.03em;font-variation-settings:"opsz" 144,"wght" 600;
+    margin-bottom:2px}
+  h1 .rest{display:block;font-size:clamp(40px,9vw,72px)}
+  h1 em{font-style:italic;color:var(--herb-soft);position:relative;white-space:nowrap}
+  /* editor's-pen underline beneath "feedings" */
+  h1 em .squiggle{position:absolute;left:-2%;right:-2%;bottom:-.12em;width:104%;height:.32em;
+    overflow:visible;pointer-events:none}
+  h1 em .squiggle path{fill:none;stroke:var(--herb-soft);stroke-width:3;
+    stroke-linecap:round;opacity:.85}
+  .ink-line{opacity:0;transform:translateY(14px);filter:blur(6px);
+    font-variation-settings:"opsz" 144,"wght" 400}
+  .ink-set .ink-line{opacity:1;transform:translateY(0);filter:blur(0);
+    font-variation-settings:"opsz" 72,"wght" 600;
+    transition:opacity .6s var(--ease),transform .6s var(--ease),
+      filter .6s var(--ease),font-variation-settings .7s var(--ease)}
+  .ink-set .ninety.ink-line{font-variation-settings:"opsz" 144,"wght" 600}
+  .sub{color:var(--muted-ink);font-size:17px;max-width:48ch;margin:20px 0 0}
+  .pillrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+  .pill{font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:.04em;
+    border:1px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--paper);
+    opacity:0;transform:scale(.92)}
+  .pills-in .pill{opacity:1;transform:scale(1);
+    transition:opacity .42s var(--ease),transform .42s var(--ease)}
+  .pill b{color:var(--lemon)}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:52px 0;border-bottom:1px solid var(--line)}
+  .label{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 14px;display:flex;gap:12px;align-items:center}
+  .label::before{content:"";width:26px;height:1px;background:var(--herb-soft)}
+  h2{font-size:clamp(26px,5vw,36px);margin-bottom:18px}
+  p.lead{color:var(--paper);font-size:16.5px;max-width:60ch}
+  p.note{color:var(--muted-ink);font-size:15px;max-width:62ch}
+  .accent{color:var(--lemon)}
+  .green{color:var(--herb-soft)}
+
+  /* ---------- WHY GRID ---------- */
+  .why{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
+  .card{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:19px;margin-bottom:8px}
+  .card p{margin:0;color:var(--muted-ink);font-size:14.5px}
+  .card .tag{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--herb-soft);display:block;margin-bottom:10px}
+
+  /* ---------- LEUCINE BAR EXPLAINER ---------- */
+  .threshold{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:8px}
+  .tmeter{position:relative;height:46px;border-radius:10px;margin:22px 0 8px;
+    background:linear-gradient(90deg,#2a3a30,#2a3a30);overflow:hidden;border:1px solid var(--line)}
+  .tfill{position:absolute;inset:0 28% 0 0;background:linear-gradient(90deg,var(--clay),var(--lemon),var(--herb));}
+  .tline{position:absolute;top:-6px;bottom:-6px;left:71%;width:2px;background:var(--paper)}
+  .tline span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-family:'Space Mono',monospace;font-size:11px;color:var(--paper);white-space:nowrap}
+  .scale{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;
+    font-size:11px;color:var(--muted)}
+
+  /* ---------- BUILDER ---------- */
+  .builder{margin-top:10px}
+  .daily{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;
+    padding:22px;display:flex;align-items:center;gap:22px;margin-bottom:18px;
+    position:relative;flex-wrap:wrap;
+    transition:border-color .5s var(--ease),box-shadow .5s var(--ease)}
+  .ring{flex:0 0 auto}
+  #ringFill{transition:stroke .5s var(--ease)}
+  .daily-info{flex:1;min-width:140px}
+  .daily-info .big{font-family:'Space Mono',monospace;font-size:30px;font-weight:700;line-height:1}
+  .daily-info .big small{font-size:15px;color:var(--muted-ink);font-weight:400}
+  .daily-info .meta{font-size:13.5px;color:var(--muted-ink);margin-top:6px;font-family:'Space Mono',monospace}
+  .daily-info .meta b{color:var(--herb-soft);display:inline-block;transition:color .35s var(--ease)}
+  .daily-info .meta b.flip{animation:numFlip .4s var(--ease)}
+  @keyframes numFlip{0%{transform:scale(1)}45%{transform:scale(1.18)}100%{transform:scale(1)}}
+  /* ---- soft herb halo, one-shot bloom on completion (ring) ---- */
+  .ringwrap{position:relative;flex:0 0 auto}
+  .ringwrap .halo{position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0;
+    background:radial-gradient(circle,rgba(111,165,121,.55) 0%,transparent 62%)}
+  .daily.complete .ringwrap .halo{animation:haloPulse 1.1s var(--ease)}
+  @keyframes haloPulse{0%{opacity:0;transform:scale(.7)}30%{opacity:.85}100%{opacity:0;transform:scale(1.5)}}
+  /* ---- wax-seal botanical medallion (completion) ---- */
+  .seal{flex:0 0 auto;width:108px;text-align:center;margin-left:auto;
+    opacity:0;transform:scale(.86);pointer-events:none;
+    display:flex;flex-direction:column;align-items:center;gap:8px}
+  .daily.complete .seal{opacity:1;transform:scale(1);
+    transition:opacity .6s var(--ease) .35s,transform .6s var(--ease) .35s}
+  .seal .disc{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;
+    background:radial-gradient(circle at 38% 30%,#2a3c30,#1a261f 78%);
+    box-shadow:inset 0 2px 5px rgba(0,0,0,.5),inset 0 -2px 4px rgba(0,0,0,.45),
+      inset 0 1px 0 rgba(243,239,228,.10),0 6px 16px -8px rgba(0,0,0,.6)}
+  .seal .disc svg{width:46px;height:46px}
+  .seal .disc svg path,.seal .disc svg .leaf{fill:none;stroke:var(--herb-soft);
+    stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .seal .disc svg .seed{fill:var(--clay);stroke:none}
+  .seal .stamp{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);line-height:1.5}
+  .seal .rule{height:1px;width:90%;background:var(--lemon);opacity:.7;
+    transform:scaleX(0);transform-origin:center}
+  .daily.complete .seal .rule{transform:scaleX(1);
+    transition:transform .55s var(--ease) .7s}
+
+  .feed{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;
+    padding:18px;margin-bottom:14px}
+  .feed-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .feed-head h3{font-size:20px}
+  .feed-head .kind{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  .stats{display:flex;gap:18px;margin:14px 0 10px;font-family:'Space Mono',monospace;font-size:13px}
+  .stats .v{font-size:22px;font-weight:700;display:block;line-height:1}
+  .stats .k{color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  .leu .v{color:var(--clay);transition:color .35s var(--ease);display:inline-block;
+    transform-origin:left bottom}
+  .leu.ok .v{color:var(--herb-soft)}
+  /* per-feeding leucine number scale-punch 1.0→1.06→1.0 on crossing */
+  .leu .v.punch{animation:leuPunch .42s var(--ease)}
+  @keyframes leuPunch{0%{transform:scale(1)}45%{transform:scale(1.06)}100%{transform:scale(1)}}
+
+  .lmeter{height:10px;border-radius:6px;background:#27352c;overflow:visible;position:relative;margin-bottom:4px}
+  .lmeter .barclip{position:absolute;inset:0;border-radius:6px;overflow:hidden}
+  .lmeter i{position:absolute;inset:0;width:0;background:var(--clay);border-radius:6px}
+  .lmeter.ok i{background:var(--herb)}
+  .lmeter .mark{position:absolute;top:-3px;bottom:-3px;left:71.4%;width:2px;background:var(--paper);opacity:.6;
+    transform-origin:center;z-index:2}
+  /* threshold-line spark: sharp scale-y pop */
+  .lmeter.spark .mark{animation:markSpark .4s var(--ease)}
+  @keyframes markSpark{0%{transform:scaleY(1);opacity:.6}
+    30%{transform:scaleY(2.1);opacity:1}100%{transform:scaleY(1);opacity:.6}}
+  /* one-shot radial glow bloom traveling outward from the line */
+  .lmeter .glow{position:absolute;top:50%;left:71.4%;width:14px;height:14px;
+    transform:translate(-50%,-50%) scale(.2);border-radius:50%;pointer-events:none;
+    opacity:0;z-index:1;
+    background:radial-gradient(circle,var(--herb-soft) 0%,rgba(111,165,121,.5) 40%,transparent 70%)}
+  .lmeter.spark .glow{animation:glowBloom .55s var(--ease)}
+  @keyframes glowBloom{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}
+    25%{opacity:.9}100%{opacity:0;transform:translate(-50%,-50%) scale(7)}}
+  /* feeding card settle-nudge on crossing */
+  .feed.nudge{animation:cardNudge .4s var(--ease)}
+  @keyframes cardNudge{0%{transform:translateY(0)}40%{transform:translateY(-1px)}100%{transform:translateY(0)}}
+  .status{font-family:'Space Mono',monospace;font-size:12px;margin:6px 0 14px;color:var(--muted-ink);
+    display:flex;align-items:center;gap:8px}
+  .status.ok{color:var(--herb-soft)}
+  .status .txt{display:inline-block}
+  /* leaf-tick unfurl beside cleared status */
+  .leaf-tick{flex:0 0 auto;width:15px;height:15px;display:none;transform-origin:left center}
+  .status.ok .leaf-tick{display:inline-block}
+  .leaf-tick path{fill:var(--herb-soft);stroke:none}
+  .leaf-tick .vein{fill:none;stroke:var(--ink-2);stroke-width:1.2;opacity:.55}
+  .status.ok.unfurl .leaf-tick{animation:leafIn .25s var(--ease)}
+  @keyframes leafIn{0%{transform:scale(0) rotate(-35deg);opacity:0}
+    100%{transform:scale(1) rotate(0);opacity:1}}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:4px}
+  .chip{display:inline-flex;align-items:center;gap:8px;background:#26352c;border:1px solid var(--line);
+    border-radius:999px;padding:6px 8px 6px 13px;font-size:13px}
+  .chip.pop{animation:chipIn .18s var(--ease)}
+  @keyframes chipIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+  .chip.removing{animation:chipOut .16s var(--ease) forwards;pointer-events:none}
+  @keyframes chipOut{to{opacity:0;transform:scale(.9);max-width:0;padding-left:0;padding-right:0;margin:0}}
+  .chip .cm{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-ink)}
+  .chip button{background:none;border:none;color:var(--muted-ink);font-size:16px;cursor:pointer;
+    line-height:1;padding:0 4px;border-radius:50%;
+    min-width:34px;min-height:34px;display:inline-flex;align-items:center;justify-content:center;margin:-6px -4px -6px 0}
+  .chip button:hover{color:var(--lemon)}
+  .add{display:flex;gap:8px}
+  select,.btn{font-family:'Inter',sans-serif;font-size:14px;border-radius:10px;border:1px solid var(--line);
+    background:var(--ink);color:var(--paper);padding:12px 14px;min-height:44px}
+  select{flex:1;min-width:0;-webkit-appearance:none;appearance:none;
+    text-overflow:ellipsis;overflow:hidden;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237E8A78' stroke-width='1.6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+  .btn{background:var(--herb);border-color:var(--herb);color:#0f1a14;font-weight:600;cursor:pointer;white-space:nowrap;
+    transition:background .2s var(--ease),transform .12s var(--ease),box-shadow .2s var(--ease)}
+  .btn:hover{background:var(--herb-soft)}
+  /* lift 1px on hover/focus for buttons & selects */
+  .btn:hover,.btn:focus-visible,select:hover,select:focus-visible{transform:translateY(-1px)}
+  select{transition:transform .12s var(--ease),border-color .2s var(--ease)}
+  /* 1-frame press-depress */
+  .btn:active{transform:translateY(1px)}
+  .eaa-toggle{display:flex;align-items:center;gap:12px;background:var(--ink-2);border:1px solid var(--line);
+    border-radius:14px;padding:16px 18px;margin-bottom:14px}
+  .eaa-toggle .t{flex:1}
+  .eaa-toggle h3{font-size:17px}
+  .eaa-toggle p{margin:4px 0 0;font-size:13px;color:var(--muted-ink)}
+  .switch{position:relative;width:52px;height:30px;flex:0 0 auto;padding:7px;margin:-7px;box-sizing:content-box}
+  .switch input{opacity:0;width:52px;height:30px;margin:0;cursor:pointer;position:absolute;top:7px;left:7px}
+  .slider{position:absolute;top:7px;left:7px;width:52px;height:30px;background:#2c3a30;border-radius:999px;transition:.25s;pointer-events:none}
+  .slider::before{content:"";position:absolute;width:22px;height:22px;left:4px;top:4px;background:var(--paper);
+    border-radius:50%;transition:transform .25s var(--ease),width .25s var(--ease)}
+  /* knob squash-and-stretch mid-slide */
+  .switch input:checked + .slider::before{animation:knobStretch .25s var(--ease)}
+  @keyframes knobStretch{0%{width:22px}50%{width:28px}100%{width:22px}}
+  .switch input:checked + .slider{background:var(--herb)}
+  .switch input:checked + .slider::before{transform:translateX(22px)}
+
+  .builder-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--paper);font-weight:500}
+  .btn.ghost:hover{background:var(--ink-2);border-color:var(--herb-soft)}
+  .grocery{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;padding:22px;margin-top:16px}
+  .grocery h3{font-size:19px;margin-bottom:6px}
+  .grocery .ghead{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--herb-soft);display:block;margin-bottom:12px}
+  .grocery ul{list-style:none;padding:0;margin:0}
+  .grocery li{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid var(--line);font-size:15px}
+  .grocery li:first-child{border-top:none}
+  .grocery li .gc{font-family:'Space Mono',monospace;color:var(--muted-ink);font-size:13px;white-space:nowrap}
+  .grocery .empty{color:var(--muted-ink);font-size:14px;margin:0}
+
+  /* ---------- RECIPES ---------- */
+  .recipe{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:16px}
+  .recipe h3{font-size:22px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .recipe h3 .macro{font-family:'Space Mono',monospace;font-size:12px;color:var(--lemon);letter-spacing:.04em}
+  .recipe ul{margin:14px 0 0;padding-left:0;list-style:none}
+  .recipe li{padding:9px 0;border-top:1px solid var(--line);font-size:15px;display:flex;justify-content:space-between;gap:14px}
+  .recipe li:first-child{border-top:none}
+  .recipe li .q{font-family:'Space Mono',monospace;color:var(--muted-ink);font-size:13px;white-space:nowrap}
+  .steps{margin-top:16px;font-size:14.5px;color:var(--muted-ink)}
+  .steps b{color:var(--paper);font-weight:600}
+  .swap{margin-top:14px;font-size:13.5px;color:var(--herb-soft);font-family:'Space Mono',monospace}
+
+  /* ---------- CHECKLIST ---------- */
+  .checks{list-style:none;padding:0;margin:18px 0 0}
+  .checks li{display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--line);align-items:flex-start}
+  .checks li::before{content:"";flex:0 0 auto;width:9px;height:9px;border-radius:2px;
+    background:var(--lemon);margin-top:7px}
+  .checks .h{font-weight:600;font-size:15.5px}
+  .checks .d{color:var(--muted-ink);font-size:14px;display:block;margin-top:2px}
+
+  footer{padding:40px 0 70px;color:var(--muted);font-size:13px;text-align:center;font-family:'Space Mono',monospace}
+  footer .disc{max-width:54ch;margin:0 auto 18px;line-height:1.6;text-transform:none;letter-spacing:0}
+
+  @media(max-width:540px){
+    .why{grid-template-columns:1fr}
+    .daily{flex-direction:row;gap:16px}
+    header{padding:48px 0 34px}
+  }
+  /* ---------- SCROLL REVEALS ---------- */
+  /* FAIL-SAFE: content visible by default. JS adds .pre-reveal only if IO supported. */
+  .pre-reveal{opacity:0;transform:translateY(16px)}
+  .pre-reveal.in{opacity:1;transform:translateY(0);
+    transition:opacity .6s var(--ease),transform .6s var(--ease);
+    transition-delay:calc(var(--i,0) * 70ms)}
+  /* mono labels: subtle letter-spacing settle on reveal */
+  .label.pre-reveal{letter-spacing:.42em}
+  .label.pre-reveal.in{letter-spacing:.28em;
+    transition:opacity .6s var(--ease),transform .6s var(--ease),letter-spacing .7s var(--ease);
+    transition-delay:calc(var(--i,0) * 70ms)}
+
+  /* ---------- FOCUS STATES ---------- */
+  a:focus-visible, button:focus-visible, select:focus-visible,
+  .switch input:focus-visible + .slider{outline:2px solid var(--lemon);outline-offset:2px}
+
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important;scroll-behavior:auto}
+    /* land every progressive-enhancement state at its FINAL value, instantly */
+    .mesh{display:none}
+    .ink-line{opacity:1;transform:none;filter:none;
+      font-variation-settings:"opsz" 72,"wght" 600}
+    .ninety.ink-line{font-variation-settings:"opsz" 144,"wght" 600}
+    .pill{opacity:1;transform:none}
+    .pre-reveal{opacity:1;transform:none}
+    .label.pre-reveal{letter-spacing:.28em}
+    /* sprig + squiggle render fully drawn (dashoffset handled in JS too) */
+    .sprig path,.sprig .leaf,h1 em .squiggle path{stroke-dasharray:none!important;stroke-dashoffset:0!important}
+    .seal{transition:none}
+    .daily.complete .seal{opacity:1;transform:none}
+    .daily.complete .seal .rule{transform:scaleX(1)}
+    .leaf-tick{transition:none}
+  }
+
+  /* ---------- PRINT ---------- */
+  @media print{
+    body{background:#fff;color:#111}
+    .card,.threshold,.daily,.feed,.eaa-toggle,.grocery,.recipe{
+      background:#fff;border:1px solid #ccc;box-shadow:none}
+    .label,.eyebrow{color:#555}
+    h1 em,.green,.accent,.card .tag,.grocery .ghead{color:#111}
+    .sub,p.note,.card p,.steps,.grocery li,.recipe li,.checks .d{color:#222}
+    .grocery li .gc,.recipe li .q,.grocery .empty{color:#444}
+    .add,.builder-actions,.eaa-toggle .switch,.chip button,#feeds .add{display:none}
+    .grocery ul,.recipe ul{color:#111}
+    footer{color:#444}
+    /* new decorative motion layers off in print */
+    body::after,.mesh,.ghost90,.sprig,.ringwrap .halo,.lmeter .glow{display:none}
+    .pre-reveal{opacity:1!important;transform:none!important}
+    .ink-line{opacity:1;transform:none;filter:none}
+    .seal{opacity:1;transform:none}
+    .seal .disc{background:#fff;box-shadow:none;border:1px solid #ccc}
+    .seal .disc svg path,.seal .disc svg .leaf{stroke:#3C7A50}
+    .seal .stamp{color:#555}
+    .seal .rule{transform:scaleX(1);background:#999}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="mesh" aria-hidden="true"><b class="b1"></b><b class="b2"></b><b class="b3"></b></div>
+  <div class="ghost90" aria-hidden="true">90</div>
+  <svg class="sprig" viewBox="0 0 300 300" aria-hidden="true" focusable="false">
+    <path class="stem" d="M252 18 C 210 60, 180 96, 158 150 C 142 188, 132 224, 130 262"/>
+    <path class="leaf" d="M204 70 C 232 52, 264 56, 280 40 C 260 70, 232 82, 204 70 Z"/>
+    <path class="leaf" d="M186 104 C 164 84, 158 54, 142 38 C 176 50, 196 78, 186 104 Z"/>
+    <path class="leaf" d="M170 148 C 200 134, 230 138, 250 122 C 226 154, 196 162, 170 148 Z"/>
+    <path class="leaf" d="M150 188 C 126 172, 118 142, 100 128 C 136 138, 160 162, 150 188 Z"/>
+    <path class="leaf" d="M138 226 C 168 214, 196 218, 216 204 C 192 234, 162 240, 138 226 Z"/>
+    <circle class="seed" cx="248" cy="20" r="6"/>
+  </svg>
+  <div class="wrap">
+    <div class="eyebrow-row">
+      <p class="eyebrow">Meal-prep field guide</p>
+      <p class="kicker" aria-hidden="true">Issue 01 · Kami</p>
+    </div>
+    <h1>
+      <span class="line ninety ink-line">90</span>
+      <span class="line rest ink-line">grams, three <em>feedings<svg class="squiggle" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 C 22 2, 40 11, 60 6 S 100 2, 118 7"/></svg></em>, veggie-forward.</span>
+    </h1>
+    <p class="sub">A protein plan tuned for Kami — built to hold lean mass and protect her hair on Wegovy. Veggie-forward by preference, but a little animal protein is welcome and often the smartest lever to clear each feeding.</p>
+    <div class="pillrow">
+      <span class="pill"><b>90g</b> protein / day</span>
+      <span class="pill"><b>≈30g</b> per feeding</span>
+      <span class="pill"><b>≥2.5g</b> leucine each</span>
+      <span class="pill">veggie-forward</span>
+    </div>
+  </div>
+</header>
+
+<!-- WHY -->
+<section>
+  <div class="wrap">
+    <p class="label">Why these numbers</p>
+    <h2>The medication changes the math.</h2>
+    <p class="note" style="margin-bottom:18px;font-style:italic">General meal-prep guidance, not medical advice — her prescriber or a registered dietitian sets anything personalized, especially protein targets, iron, and supplements.</p>
+    <p class="lead">Wegovy quiets appetite, so she'll eat less by volume. The risk isn't fat — it's that a real slice of any weight lost comes off as <span class="green">muscle and hair</span> unless protein stays high and well-timed. Every bite has to earn its place.</p>
+    <div class="why">
+      <div class="card">
+        <span class="tag">Hold the muscle</span>
+        <h3>Protein is the anchor</h3>
+        <p>On a GLP-1, roughly 25–40% of weight lost can be lean tissue (about 40% in the semaglutide STEP-1 trial). Treat ~90g/day as a <b>floor, not the finish line</b>, spread across the day — not stacked into one meal — to tell the body to keep muscle instead of burning it. Muscle-preservation guidance runs ~1.2–1.6g protein per kg of body weight (higher if she's lifting); clinicians base that on ideal or adjusted body weight, not the scale number, so have her prescriber or a dietitian set the exact target — and pair it with 2–3×/week resistance training, the single biggest lever for keeping muscle.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Keep the hair</span>
+        <h3>Shedding is preventable</h3>
+        <p>Hair loss on Wegovy is mostly rapid-loss + under-nutrition, not the drug itself. Steady protein plus iron, zinc, and enough calories is the defense. It usually settles once intake is solid.</p>
+      </div>
+      <div class="card">
+        <span class="tag">The switch</span>
+        <h3>Leucine flips the signal</h3>
+        <p>One amino acid — leucine — is the trigger for building muscle. Each feeding needs ~2.5–3g of it to "turn on." Below that, the protein mostly just passes through.</p>
+      </div>
+      <div class="card">
+        <span class="tag">The plant catch</span>
+        <h3>Combine to complete</h3>
+        <p>Most plants are lighter in leucine and miss an amino or two. Pairing sources (legume + grain + soy, or a pea-rice blend) closes the gaps. And the cheapest way over the line is a small touch of real animal protein — one egg, a splash of milk, grated parmesan, or a half-scoop of whey.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEUCINE EXPLAINER -->
+<section>
+  <div class="wrap">
+    <p class="label">The leucine line</p>
+    <h2>Why a plate of beans isn't enough on its own.</h2>
+    <p class="note">Animal and whey protein clear the leucine threshold easily — a single scoop of whey does it. Plant feedings get there too, they just need either <span class="accent">more total grams</span> or a <span class="accent">smarter combination</span>. The builder below makes that visible: each feeding has to cross the white line.</p>
+    <div class="threshold">
+      <div class="scale"><span>0g</span><span>leucine per feeding</span><span>3.5g</span></div>
+      <div class="tmeter">
+        <div class="tfill"></div>
+        <div class="tline"><span>2.5g — switch flips</span></div>
+      </div>
+      <p class="note" style="margin-top:14px">Left of the line, muscle-building stays mostly idle. Cross it and the feeding "counts." Whey gets there on its own; a plant plate usually needs a legume <span class="accent">+</span> a soy food <span class="accent">+</span> a grain. The simplest lever per gram is a small bump of real animal protein — <span class="accent">one egg, a splash of milk, or a half-scoop of whey</span> — or a small EAA top-up.</p>
+      <p class="note" style="margin-top:10px"><span class="accent">One caveat:</span> not all animal "protein" counts. Collagen — bone broth, gelatin — is low in leucine and missing tryptophan, so it barely moves the muscle signal no matter how many grams it shows. Good for flavor and skin, not for the switch.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BUILDER -->
+<section>
+  <div class="wrap builder">
+    <p class="label">Daily builder · tap to compose</p>
+    <h2>Build her day, watch it clear.</h2>
+    <p class="note" style="margin-bottom:22px">Add foods to each feeding. The bar fills toward the leucine line; the ring tracks the run to 90g. It loads pre-filled with a veggie-forward day you can keep or swap — a small animal-protein add (egg, milk, whey) is often the easiest way to clear a short feeding. Your edits save automatically.</p>
+
+    <div class="daily">
+      <div class="ringwrap">
+        <div class="halo" aria-hidden="true"></div>
+        <svg class="ring" width="92" height="92" viewBox="0 0 92 92">
+          <circle cx="46" cy="46" r="40" fill="none" stroke="#27352c" stroke-width="8"/>
+          <circle id="ringFill" cx="46" cy="46" r="40" fill="none" stroke="var(--herb)" stroke-width="8"
+            stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="251.3"
+            transform="rotate(-90 46 46)"/>
+        </svg>
+      </div>
+      <div class="daily-info">
+        <div class="big"><span id="dayProtein">0</span><small> / 90g protein</small></div>
+        <div class="meta"><b id="feedsOk">0</b>/3 feedings cleared leucine · <span id="dayLeu">0</span>g leucine total</div>
+      </div>
+      <div class="seal" aria-hidden="true">
+        <div class="disc">
+          <svg viewBox="0 0 60 60" focusable="false">
+            <path class="stem" d="M44 12 C 34 22, 30 30, 28 42 C 27 48, 27 52, 27 54"/>
+            <path class="leaf" d="M38 18 C 46 14, 52 16, 56 12 C 50 22, 42 24, 38 18 Z"/>
+            <path class="leaf" d="M34 28 C 42 24, 48 26, 52 22 C 46 32, 38 34, 34 28 Z"/>
+            <path class="leaf" d="M28 38 C 20 34, 14 36, 10 32 C 18 42, 24 44, 28 38 Z"/>
+            <circle class="seed" cx="43" cy="13" r="3"/>
+          </svg>
+        </div>
+        <div class="stamp">Day Complete<br>Leucine ×3</div>
+        <div class="rule"></div>
+      </div>
+    </div>
+
+    <div id="feeds"></div>
+
+    <div class="eaa-toggle">
+      <div class="t">
+        <h3 id="eaaToggleLabel">EAA rescue</h3>
+        <p>~6g essential aminos (≈2.5g leucine) stirred into a flavored electrolyte drink. A clean way to push one short feeding over the line. Pick which feeding it goes into.</p>
+        <div class="add" id="eaaTargetWrap" style="margin-top:12px;max-width:320px;display:none">
+          <select id="eaaTarget" aria-label="EAA target feeding"></select>
+        </div>
+      </div>
+      <label class="switch"><input type="checkbox" id="eaaToggle" aria-labelledby="eaaToggleLabel"><span class="slider"></span></label>
+    </div>
+
+    <div class="builder-actions">
+      <button class="btn ghost" id="resetBtn">Reset to default day</button>
+      <button class="btn" id="groceryBtn">Build grocery list</button>
+    </div>
+    <div id="groceryPanel" class="grocery" hidden></div>
+  </div>
+</section>
+
+<!-- RECIPES -->
+<section>
+  <div class="wrap">
+    <p class="label">The three feedings</p>
+    <h2>Prep blueprints.</h2>
+
+    <div class="recipe">
+      <h3>1 · The shake <span class="macro">≈31g protein · 2.7g leucine</span></h3>
+      <ul>
+        <li><span>Pea + rice protein blend (or whey isolate)</span><span class="q">1 scoop</span></li>
+        <li><span>Soy milk — adds complete protein &amp; leucine</span><span class="q">1 cup</span></li>
+        <li><span>Frozen banana or berries</span><span class="q">½ cup</span></li>
+        <li><span>Honey</span><span class="q">1 tsp</span></li>
+        <li><span>Ice + splash of water</span><span class="q">to blend</span></li>
+      </ul>
+      <p class="steps"><b>Why it works:</b> soy milk instead of water is the quiet upgrade — it pushes the blend over the leucine line and makes it creamier. The honey/fruit is the bribe.</p>
+      <p class="swap">Swap → oat milk drops the protein; keep it soy or dairy.</p>
+    </div>
+
+    <div class="recipe">
+      <h3>2 · The plate <span class="macro">≈33g protein · 3.1g leucine</span></h3>
+      <ul>
+        <li><span>Tempeh, cubed &amp; pan-crisped (leucine MVP)</span><span class="q">½ cup</span></li>
+        <li><span>Lentils, simmered</span><span class="q">¾ cup</span></li>
+        <li><span>Quinoa, cooked</span><span class="q">½ cup</span></li>
+        <li><span>One egg, stirred through warm (or grated parmesan)</span><span class="q">1 large</span></li>
+        <li><span>Edamame or roasted veg, folded in</span><span class="q">handful</span></li>
+        <li><span>Nutritional yeast + olive oil to finish</span><span class="q">to taste</span></li>
+      </ul>
+      <p class="steps"><b>Why it works:</b> tempeh + lentil + quinoa already build a near-complete amino profile, and the small real-protein add — an egg stirred through off the heat, or a handful of grated parmesan — is the efficient lever that pushes leucine cleanly over the line. A splash of milk or a half-scoop of whey does the same job.</p>
+      <p class="swap" style="color:var(--muted-ink)">Want broth? → simmering the grains in bone broth is fine for flavor and a little collagen for skin — but collagen is low-leucine and incomplete, so it does <b>not</b> count toward the muscle signal. Use the egg/dairy for that.</p>
+      <p class="swap">No tempeh? → firm tofu scramble + black beans + an egg or parmesan hits similar. Fully plant version → drop the egg, lean on tempeh + edamame + a half-scoop of soy isolate to clear the line.</p>
+    </div>
+
+    <div class="recipe">
+      <h3>3 · The snack stack <span class="macro">≈30g protein · 2.6g leucine</span></h3>
+      <ul>
+        <li><span>Greek yogurt or whipped cottage cheese (if dairy's ok)</span><span class="q">1 cup</span></li>
+        <li><span>Lemon protein gummies (recipe below)</span><span class="q">1 serving</span></li>
+        <li><span>Hemp seeds + berries on top</span><span class="q">2 tbsp</span></li>
+      </ul>
+      <p class="steps"><b>How it clears:</b> real dairy — Greek yogurt or whipped cottage cheese — carries this feeding over the line on its own. <b>Plant option:</b> swap in a soy yogurt + a half-scoop of protein stirred in, then the gummies and hemp finish it. Either way, the gummies alone won't carry a feeding — they're a topper, not the base.</p>
+      <p class="swap">Dairy-free → soy yogurt is the only plant yogurt with real protein; almond/coconut won't count.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GUMMIES -->
+<section>
+  <div class="wrap">
+    <p class="label">Home recipe</p>
+    <h2>Lemon protein gummy bears.</h2>
+    <p class="note" style="margin-bottom:10px">The 1Up-style trick — but built to actually carry protein. Gelatin sets them but is incomplete on its own, so the whey (or soy) isolate is what makes them count. Makes roughly one snack-serving's worth of protein per batch.</p>
+    <div class="recipe">
+      <h3>Lemon gummies <span class="macro">≈12–15g protein / batch</span></h3>
+      <ul>
+        <li><span>Cold water or lemon juice</span><span class="q">½ cup</span></li>
+        <li><span>Unflavored gelatin (sets it)</span><span class="q">3 tbsp</span></li>
+        <li><span>Lemon protein isolate (whey or soy)</span><span class="q">1 scoop</span></li>
+        <li><span>Fresh lemon juice</span><span class="q">2 tbsp</span></li>
+        <li><span>Honey or a pinch of sweetener</span><span class="q">to taste</span></li>
+      </ul>
+      <p class="steps"><b>Method:</b> sprinkle gelatin over the cold liquid, let it bloom 2 min. Warm gently on low until clear — <b>don't boil</b> (kills the set and clumps the protein). Off heat, whisk in the protein, lemon juice, and sweetener until smooth. Pour into bear molds, chill 1–2 hrs.</p>
+      <p class="swap">For a vegan set → swap gelatin for agar (use ~1 tsp agar per cup liquid; it sets firmer and does need a brief boil before adding protein once slightly cooled).</p>
+    </div>
+  </div>
+</section>
+
+<!-- HAIR -->
+<section>
+  <div class="wrap">
+    <p class="label">Hair insurance</p>
+    <h2>Beyond protein, the four that matter.</h2>
+    <p class="note">Protein is the foundation, but veggie-forward + rapid loss is exactly the combo that thins hair. These cover the usual gaps. Worth a quick check with her prescriber, especially iron, before supplementing.</p>
+    <ul class="checks">
+      <li><div><span class="h">Iron — the big one</span><span class="d">Plant (non-heme) iron absorbs poorly; rapid weight loss drains stores. Pair iron-rich foods (lentils, tofu, pumpkin seeds, spinach) with vitamin C, and ask about checking ferritin — low iron is the most common hidden cause of shedding.</span></div></li>
+      <li><div><span class="h">Zinc</span><span class="d">Pumpkin seeds, hemp, legumes, cashews. Directly tied to the hair-growth cycle and easy to run low on without meat.</span></div></li>
+      <li><div><span class="h">Enough calories, not too fast</span><span class="d">Hitting protein but eating far too little overall still triggers shedding. The goal is steady loss, not a crash — protein-dense feedings help her get there without volume.</span></div></li>
+      <li><div><span class="h">Biotin + B-complex</span><span class="d">Rarely truly deficient, but a B-complex is cheap insurance on a veggie-forward diet (B12 especially matters). Don't megadose biotin — it can skew lab results.</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <p class="disc">This is a meal-prep planning guide, not medical advice. Targets here are general — her prescriber or a dietitian should set anything personalized, especially around protein targets, iron, supplements, and how fast she's losing.</p>
+  Built for Kami · veggie-forward, leucine-first
+</footer>
+
+<script>
+// ---- Ingredient database: protein (g) + leucine (g) per stated serving ----
+// Values are approximate per-serving figures from standard nutrition databases
+// (USDA FoodData Central + typical supplement labels). Rounded, not precise.
+const DB = {
+  whey:    {n:"Whey isolate · 1 scoop",        p:25, l:2.7},
+  pearice: {n:"Pea+rice blend · 1 scoop",      p:24, l:2.1},
+  soyiso:  {n:"Soy protein isolate · 1 scoop", p:25, l:2.0},
+  soymilk: {n:"Soy milk · 1 cup",              p:7,  l:0.55},
+  milk:    {n:"Dairy milk · 1 cup",            p:8,  l:0.8},
+  tofu:    {n:"Firm tofu · ½ block",           p:17, l:1.3},
+  tempeh:  {n:"Tempeh · ½ cup",                p:16, l:1.2},
+  edamame: {n:"Edamame · 1 cup",               p:18, l:1.4},
+  lentils: {n:"Lentils · ¾ cup",               p:14, l:1.0},
+  black:   {n:"Black beans · 1 cup",           p:15, l:1.2},
+  chick:   {n:"Chickpeas · 1 cup",             p:15, l:1.1},
+  quinoa:  {n:"Quinoa · ½ cup",                p:4,  l:0.25},
+  hemp:    {n:"Hemp seeds · 3 tbsp",           p:10, l:0.65},
+  pumpkin: {n:"Pumpkin seeds · ¼ cup",         p:9,  l:0.65},
+  nutyeast:{n:"Nutritional yeast · ¼ cup",     p:8,  l:0.6},
+  greek:   {n:"Greek yogurt · 1 cup",          p:22, l:2.3},
+  cottage: {n:"Cottage cheese · 1 cup",        p:24, l:2.5},
+  soyyog:  {n:"Soy yogurt · 1 cup",            p:9,  l:0.7},
+  // Bone broth zeroed on purpose: collagen is low-leucine, missing tryptophan, and
+  // does not drive muscle protein synthesis — so it must not clear the leucine line.
+  // (strongerbyscience.com collagen spotlight; nzmp.com collagen vs whey)
+  bonebroth:{n:"Bone broth · 1 cup (collagen — doesn't count)", p:0, l:0},
+  gummies: {n:"Lemon protein gummies · serving",p:13, l:1.1},
+  banana:  {n:"Banana / berries · ½ cup",      p:1,  l:0.05},
+  egg:     {n:"Egg · 1 large",                 p:6,  l:0.5}
+};
+
+const THRESHOLD = 2.5;   // leucine "switch" line
+const LMAX = 3.5;        // meter ceiling
+const EAA = {p:6, l:2.5};
+const STORE_KEY = 'kami_protein_day_v1';
+
+// Pre-filled plant-forward day (default)
+const DEFAULT_FEEDS = [
+  {name:"1 · Shake",  kind:"morning",   items:["pearice","soymilk","banana"]},
+  {name:"2 · Plate",  kind:"midday",    items:["tempeh","lentils","quinoa","egg"]},
+  {name:"3 · Snack",  kind:"evening",   items:["greek","gummies","hemp"]}
+];
+
+// deep clone helper
+function clone(o){return JSON.parse(JSON.stringify(o));}
+
+let FEEDS = clone(DEFAULT_FEEDS);
+let eaaOn = false;
+let eaaTarget = 0;   // index of feeding the EAA rescue applies to
+
+function save(){
+  try{
+    localStorage.setItem(STORE_KEY, JSON.stringify({feeds:FEEDS, eaaOn, eaaTarget}));
+  }catch(e){/* file:// or storage disabled — ignore */}
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return;
+    const s = JSON.parse(raw);
+    if(s && Array.isArray(s.feeds)){
+      // keep saved items but only ones that still exist in DB; preserve name/kind from defaults
+      FEEDS = s.feeds.map((f,i)=>({
+        name: (DEFAULT_FEEDS[i]&&DEFAULT_FEEDS[i].name) || f.name,
+        kind: (DEFAULT_FEEDS[i]&&DEFAULT_FEEDS[i].kind) || f.kind,
+        items: (f.items||[]).filter(k=>DB[k])
+      }));
+    }
+    if(s && typeof s === 'object'){
+      eaaOn = !!s.eaaOn;
+      eaaTarget = Number.isInteger(s.eaaTarget) ? s.eaaTarget : 0;
+    }
+    clampEaaTarget();
+  }catch(e){/* ignore corrupt/blocked storage */}
+}
+
+// Keep eaaTarget a valid feeding index no matter how it got set (load/corrupt storage/feed-count change)
+function clampEaaTarget(){
+  if(!(eaaTarget>=0 && eaaTarget<FEEDS.length)) eaaTarget=0;
+}
+
+const feedsEl = document.getElementById('feeds');
+
+// ---- motion engine (reduced-motion aware) ----
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)');
+const reduced = ()=>RM.matches;
+
+// Per-feeding ignition state (fire-once). prevOk seeded on init/load/reset.
+let prevOk = [];
+let firstPaint = true;        // seed springs from real state on first render
+
+// velocity-integrated springs: one bar spring per feeding + one ring spring
+const barSprings = [];        // {cur,vel,target} in 0..100 (pct)
+const ringSpring = {cur:0, vel:0, target:0};   // 0..1 fraction
+let ringStart = 0, proteinStart = 0;           // capture for lockstep integer count-up
+let rafId = null;
+const STIFF = 170, DAMP = 22;  // shared spring constants
+
+function ensureSprings(n){
+  while(barSprings.length < n) barSprings.push({cur:0, vel:0, target:0});
+  barSprings.length = n;
+}
+
+function startLoop(){ if(rafId===null) rafId = requestAnimationFrame(tick); }
+
+let lastT = 0;
+function tick(now){
+  const dt = Math.min(0.032, lastT ? (now-lastT)/1000 : 0.016);
+  lastT = now;
+  let moving = false;
+  // integrate bar springs → write width to live DOM
+  const bars = document.querySelectorAll('.lmeter i');
+  barSprings.forEach((s,i)=>{
+    const f = -STIFF*(s.cur - s.target) - DAMP*s.vel;
+    s.vel += f*dt; s.cur += s.vel*dt;
+    if(Math.abs(s.cur-s.target)>0.05 || Math.abs(s.vel)>0.05) moving=true;
+    else { s.cur = s.target; s.vel = 0; }
+    if(bars[i]) bars[i].style.width = Math.max(0,Math.min(100,s.cur))+'%';
+  });
+  // integrate ring spring → dashoffset + integer protein readout
+  {
+    const s = ringSpring;
+    const f = -STIFF*(s.cur - s.target) - DAMP*s.vel;
+    s.vel += f*dt; s.cur += s.vel*dt;
+    let ringMoving = false;
+    if(Math.abs(s.cur-s.target)>0.0006 || Math.abs(s.vel)>0.0006){ moving=true; ringMoving=true; }
+    else { s.cur = s.target; s.vel = 0; }
+    const ringEl = document.getElementById('ringFill');
+    if(ringEl) ringEl.style.strokeDashoffset = 251.3*(1 - Math.max(0,Math.min(1,s.cur)));
+    // integer protein readout ticks in lockstep with the ring sweep.
+    // Interpolate between the pre-edit shown value and the new target by the
+    // spring's normalized progress, so values >90g (ring-capped) still count true.
+    const dp = document.getElementById('dayProtein');
+    if(dp){
+      if(ringMoving){
+        const span = s.target - ringStart;
+        const prog = Math.abs(span) < 1e-6 ? 1 : (s.cur - ringStart)/span;
+        const val = proteinStart + (dayProteinTarget - proteinStart)*Math.max(0,Math.min(1,prog));
+        dp.textContent = Math.round(val);
+      } else {
+        dp.textContent = dayProteinTarget;
+      }
+    }
+  }
+  if(moving){ rafId = requestAnimationFrame(tick); }
+  else { rafId = null; lastT = 0; }   // idle: CPU/battery guard
+}
+
+function optionsHTML(){
+  return Object.keys(DB).map(k=>`<option value="${k}">${DB[k].n}  (+${DB[k].p}g P / ${DB[k].l}g L)</option>`).join('');
+}
+
+function render(){
+  feedsEl.innerHTML = '';
+  ensureSprings(FEEDS.length);
+  FEEDS.forEach((f,i)=>{
+    let p=0,l=0;
+    const chips = f.items.map((k,idx)=>{
+      p+=DB[k].p; l+=DB[k].l;
+      const pop = (justAdded && justAdded.f===i && justAdded.idx===idx && !reduced()) ? ' pop' : '';
+      return `<span class="chip${pop}">${DB[k].n}<span class="cm">${DB[k].p}P</span>
+        <button data-f="${i}" data-i="${idx}" aria-label="remove ${DB[k].n.split(' · ')[0]}">×</button></span>`;
+    }).join('');
+    const hasEaa = eaaOn && eaaTarget===i;
+    if(hasEaa){ p+=EAA.p; l+=EAA.l; }
+    const ok = l>=THRESHOLD;
+    const pct = Math.min(100,(l/LMAX)*100);
+    const eaaChip = hasEaa
+      ? `<span class="chip" style="border-color:var(--herb-soft)">EAA rescue<span class="cm">${EAA.p}P</span></span>`
+      : '';
+    feedsEl.insertAdjacentHTML('beforeend',`
+      <div class="feed">
+        <div class="feed-head"><h3>${f.name}</h3><span class="kind">${f.kind}</span></div>
+        <div class="stats">
+          <div><span class="v">${Math.round(p)}</span><span class="k">grams protein</span></div>
+          <div class="leu ${ok?'ok':''}"><span class="v">${l.toFixed(1)}</span><span class="k">grams leucine</span></div>
+        </div>
+        <div class="lmeter ${ok?'ok':''}"><span class="barclip"><i style="width:${pct}%"></i></span><span class="mark"></span><span class="glow"></span></div>
+        <div class="status ${ok?'ok':''}"><span class="txt">${ok?'✓ leucine cleared — feeding counts':'below the line — add a soy food, grain, an egg/dairy, or EAA'}</span><svg class="leaf-tick" viewBox="0 0 15 15" aria-hidden="true" focusable="false"><path d="M2 13 C 2 7, 6 2, 13 2 C 13 8, 9 13, 2 13 Z"/><path class="vein" d="M3.5 11.5 L 11 4"/></svg></div>
+        <div class="chips">${chips}${eaaChip}</div>
+        <div class="add">
+          <select id="sel${i}">${optionsHTML()}</select>
+          <button class="btn" data-add="${i}">Add</button>
+        </div>
+      </div>`);
+  });
+  wire();
+  syncEaaTargetSelect();
+  tally();
+  applyMotion();
+  const gp=document.getElementById('groceryPanel');
+  if(gp && !gp.hidden) buildGrocery();
+}
+
+// Compute per-feeding leucine, fire ignition sparks on below→cleared crossings,
+// set spring targets, drive count-ups, and toggle the completion state.
+function applyMotion(){
+  const okNow = [];
+  let feedsCleared = 0, dayP = 0;
+  FEEDS.forEach((f,i)=>{
+    let fl=0, fp=0;
+    f.items.forEach(k=>{ fp+=DB[k].p; fl+=DB[k].l; });
+    if(eaaOn && eaaTarget===i){ fp+=EAA.p; fl+=EAA.l; }
+    const ok = fl>=THRESHOLD;
+    okNow[i] = ok; if(ok) feedsCleared++; dayP+=fp;
+    const pct = Math.min(100,(fl/LMAX)*100);
+    // spring target for this feeding's bar
+    if(barSprings[i]) barSprings[i].target = pct;
+
+    const crossedUp = ok && prevOk[i] === false;   // strict below→cleared
+    const card = feedsEl.children[i];
+    if(!card) return;
+    const meter = card.querySelector('.lmeter');
+    const leuV  = card.querySelector('.leu .v');
+    const status= card.querySelector('.status');
+
+    if(reduced()){
+      // pre-ignited static: bar at target, no spark/punch/typing/unfurl
+      const bar = card.querySelector('.lmeter i');
+      if(bar) bar.style.width = pct+'%';
+      if(barSprings[i]){ barSprings[i].cur = pct; barSprings[i].vel = 0; }
+    } else if(crossedUp){
+      // ONE sharp spark on the actively-crossing line (two-glow ceiling honored
+      // because only crossing lines light; all-three only at completion)
+      if(meter){ meter.classList.remove('spark'); void meter.offsetWidth; meter.classList.add('spark'); }
+      if(leuV){ leuV.classList.remove('punch'); void leuV.offsetWidth; leuV.classList.add('punch'); }
+      if(status){ status.classList.add('unfurl'); typeStatus(status); }
+      card.classList.remove('nudge'); void card.offsetWidth; card.classList.add('nudge');
+    }
+  });
+
+  prevOk = okNow.slice();
+
+  // ring + protein count-up seeded from REAL state on first paint
+  const frac = Math.min(1, dayP/90);
+  if(reduced()){
+    ringSpring.cur = ringSpring.target = frac; ringSpring.vel = 0;
+    const ringEl = document.getElementById('ringFill');
+    if(ringEl) ringEl.style.strokeDashoffset = 251.3*(1-frac);
+  } else {
+    // capture where the count-up starts from BEFORE retargeting the spring
+    ringStart = ringSpring.cur;
+    proteinStart = firstPaint ? dayProteinTarget
+      : parseInt(document.getElementById('dayProtein').textContent,10) || 0;
+    ringSpring.target = frac;
+    if(firstPaint){ ringSpring.cur = frac; ringSpring.vel = 0; ringStart = frac; proteinStart = dayProteinTarget; }
+    startLoop();
+  }
+
+  // completion state: all three cleared AND ring at/over 90g
+  const complete = feedsCleared===3 && dayP>=90;
+  const daily = document.querySelector('.daily');
+  if(daily){
+    const was = daily.classList.contains('complete');
+    daily.classList.toggle('complete', complete);
+    if(complete && !was && !reduced()){ /* halo/seal fire via CSS class add */ }
+  }
+  firstPaint = false;
+}
+
+// type the cleared status text in character-by-character
+function typeStatus(status){
+  const txt = status.querySelector('.txt');
+  if(!txt) return;
+  const full = txt.textContent;
+  if(reduced()){ txt.textContent = full; return; }
+  txt.textContent = '';
+  let n = 0;
+  (function step(){
+    n++; txt.textContent = full.slice(0,n);
+    if(n < full.length) setTimeout(step, 14);
+  })();
+}
+
+let justAdded = null;   // {f,idx} of the chip to pop-in on next render
+function wire(){
+  document.querySelectorAll('[data-add]').forEach(b=>{
+    b.onclick=()=>{
+      const i=+b.dataset.add;
+      FEEDS[i].items.push(document.getElementById('sel'+i).value);
+      justAdded = {f:i, idx:FEEDS[i].items.length-1};
+      save();render();justAdded=null;
+    };
+  });
+  document.querySelectorAll('.chip button').forEach(b=>{
+    b.onclick=()=>{
+      const fi=+b.dataset.f, ii=+b.dataset.i;
+      const doRemove=()=>{FEEDS[fi].items.splice(ii,1);save();render();};
+      if(reduced()){ doRemove(); return; }
+      // collapse-out the chip, then re-render
+      const chip = b.closest('.chip');
+      if(chip){ chip.classList.add('removing'); setTimeout(doRemove,150); }
+      else doRemove();
+    };
+  });
+}
+
+let dayProteinTarget = 0;
+function tally(){
+  clampEaaTarget();
+  let p=0,l=0,ok=0;
+  FEEDS.forEach((f,i)=>{
+    let fl=0; f.items.forEach(k=>{p+=DB[k].p; fl+=DB[k].l;});
+    if(eaaOn && eaaTarget===i){ p+=EAA.p; fl+=EAA.l; }
+    l+=fl; if(fl>=THRESHOLD) ok++;
+  });
+  dayProteinTarget = Math.round(p);
+  // feedsOk numeral flip when the count changes
+  const feedsOkEl = document.getElementById('feedsOk');
+  const prevFeeds = parseInt(feedsOkEl.textContent,10);
+  feedsOkEl.textContent = ok;
+  if(!reduced() && !firstPaint && prevFeeds!==ok){
+    feedsOkEl.classList.remove('flip'); void feedsOkEl.offsetWidth; feedsOkEl.classList.add('flip');
+  }
+  document.getElementById('dayLeu').textContent=l.toFixed(1);
+  // dayProtein: snap when reduced/first paint or springs idle; else the rAF loop tracks it.
+  const dp = document.getElementById('dayProtein');
+  if(reduced() || firstPaint) dp.textContent = dayProteinTarget;
+}
+
+// ---- EAA rescue target selector ----
+const eaaToggleEl = document.getElementById('eaaToggle');
+const eaaTargetWrap = document.getElementById('eaaTargetWrap');
+const eaaTargetSel = document.getElementById('eaaTarget');
+
+function syncEaaTargetSelect(){
+  clampEaaTarget();
+  eaaTargetWrap.style.display = eaaOn ? 'flex' : 'none';
+  eaaTargetSel.innerHTML = FEEDS.map((f,i)=>
+    `<option value="${i}" ${i===eaaTarget?'selected':''}>Into → ${f.name}</option>`).join('');
+}
+
+eaaToggleEl.addEventListener('change',e=>{eaaOn=e.target.checked; clampEaaTarget(); save(); render();});
+eaaTargetSel.addEventListener('change',e=>{eaaTarget=+e.target.value; save(); render();});
+
+// ---- Reset ----
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  FEEDS = clone(DEFAULT_FEEDS);
+  eaaOn = false; eaaTarget = 0;
+  eaaToggleEl.checked = false;
+  try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+  document.getElementById('groceryPanel').hidden = true;
+  // reseed ignition + count-up state so reset lands cleanly (no gaudy re-fire / count-from-0)
+  prevOk = []; firstPaint = true;
+  render();
+});
+
+// ---- Grocery list ----
+function buildGrocery(){
+  const counts = {};
+  FEEDS.forEach(f=>f.items.forEach(k=>{counts[k]=(counts[k]||0)+1;}));
+  const panel = document.getElementById('groceryPanel');
+  const foodKeys = Object.keys(counts);
+  const hasContent = foodKeys.length>0 || eaaOn;
+  if(!hasContent){
+    panel.innerHTML = `<span class="ghead">Grocery list</span><p class="empty">Nothing in the day yet — add foods to a feeding first.</p>`;
+  }else{
+    const rows = foodKeys.sort((a,b)=>DB[a].n.localeCompare(DB[b].n)).map(k=>{
+      // strip the serving suffix after " · " for a cleaner shopping name
+      const name = DB[k].n.split(' · ')[0];
+      const c = counts[k];
+      return `<li><span>${name}</span><span class="gc">×${c}</span></li>`;
+    });
+    if(eaaOn) rows.push(`<li><span>EAA / electrolyte powder</span><span class="gc">×1</span></li>`);
+    panel.innerHTML = `<span class="ghead">Grocery list</span><h3>What to buy</h3><ul>${rows.join('')}</ul>`;
+  }
+}
+
+document.getElementById('groceryBtn').addEventListener('click',()=>{
+  buildGrocery();
+  document.getElementById('groceryPanel').hidden = false;
+});
+
+// ---- hero load sequence: ink-set, self-drawing sprig + squiggle, pill deal-in ----
+function setupSelfDraw(){
+  // sprig: stroke-draw leaf by leaf; squiggle: editor's-pen underline
+  const sprigStrokes = document.querySelectorAll('.sprig path, .sprig .leaf');
+  const squiggle = document.querySelector('h1 em .squiggle path');
+  const all = [...sprigStrokes];
+  if(squiggle) all.push(squiggle);
+  all.forEach(el=>{
+    let len = 0;
+    try{ len = el.getTotalLength(); }catch(e){ len = 0; }
+    if(!len) return;
+    el.style.strokeDasharray = len;
+    el.style.strokeDashoffset = reduced() ? 0 : len;
+  });
+  return {sprigStrokes:[...sprigStrokes], squiggle};
+}
+
+function runHero(){
+  const lines = document.querySelectorAll('h1 .ink-line');
+  const draw = setupSelfDraw();
+  if(reduced()){
+    // land everything at final state instantly
+    document.querySelector('h1').classList.add('ink-set');
+    document.querySelector('header .pillrow').classList.add('pills-in');
+    return;
+  }
+  // ink-set: each line rises + sets, ~90ms stagger
+  requestAnimationFrame(()=>{
+    document.querySelector('h1').classList.add('ink-set');
+    lines.forEach((el,i)=>{ el.style.transitionDelay = (i*0.09)+'s'; });
+  });
+  // sprig self-draws once, leaf by leaf (~1.4s total)
+  draw.sprigStrokes.forEach((el,i)=>{
+    let len=0; try{len=el.getTotalLength();}catch(e){}
+    if(!len) return;
+    el.style.transition = `stroke-dashoffset .42s var(--ease) ${0.2 + i*0.18}s`;
+    requestAnimationFrame(()=>{ el.style.strokeDashoffset = 0; });
+  });
+  // squiggle underline draws ~700ms after the line sets
+  if(draw.squiggle){
+    let len=0; try{len=draw.squiggle.getTotalLength();}catch(e){}
+    if(len){
+      draw.squiggle.style.transition = 'stroke-dashoffset .5s var(--ease) .7s';
+      requestAnimationFrame(()=>{ draw.squiggle.style.strokeDashoffset = 0; });
+    }
+  }
+  // pills deal in last, staggered
+  const pillrow = document.querySelector('header .pillrow');
+  const pills = pillrow.querySelectorAll('.pill');
+  pills.forEach((p,i)=>{ p.style.transitionDelay = (0.55 + i*0.07)+'s'; });
+  requestAnimationFrame(()=>{ pillrow.classList.add('pills-in'); });
+}
+
+// ---- scroll reveals: single IO, fail-safe (pre-reveal only when IO supported) ----
+function setupReveals(){
+  if(!('IntersectionObserver' in window)) return;  // FAIL-SAFE: never trap content hidden
+  const io = new IntersectionObserver((entries,obs)=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){ en.target.classList.add('in'); obs.unobserve(en.target); }
+    });
+  },{threshold:0.15});
+  // reveal content sections only; skip the live builder section (.wrap.builder)
+  document.querySelectorAll('section .wrap:not(.builder)').forEach(wrap=>{
+    const items = wrap.querySelectorAll('.label, h2, p.lead, p.note, .why > .card, .threshold, .recipe, .checks > li');
+    let n=0;
+    items.forEach(el=>{
+      el.classList.add('pre-reveal');
+      el.style.setProperty('--i', Math.min(n++,6));   // cap stagger so late items aren't slow
+      io.observe(el);
+    });
+  });
+}
+
+// ---- init ----
+load();
+eaaToggleEl.checked = eaaOn;
+render();
+runHero();
+setupReveals();
+// FAIL-SAFE: if rAF never fires (starved tab, blocked fonts, JS hiccup), force the hero
+// to its final visible state so the headline + pills can never get trapped at opacity:0.
+setTimeout(()=>{
+  const h1 = document.querySelector('h1');
+  if(h1 && !h1.classList.contains('ink-set')) h1.classList.add('ink-set');
+  const pr = document.querySelector('header .pillrow');
+  if(pr && !pr.classList.contains('pills-in')) pr.classList.add('pills-in');
+}, 1500);
+// keep behavior correct if the user flips OS reduced-motion mid-session
+RM.addEventListener('change', ()=>{ firstPaint = true; prevOk = []; render(); });
+</script>
+</body>
+</html>
