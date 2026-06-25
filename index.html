@@ -640,8 +640,31 @@ const DB = {
   bonebroth:{n:"Bone broth · 1 cup (collagen — doesn't count)", p:0, l:0},
   gummies: {n:"Lemon protein gummies · serving",p:13, l:1.1},
   banana:  {n:"Banana / berries · ½ cup",      p:1,  l:0.05},
-  egg:     {n:"Egg · 1 large",                 p:6,  l:0.5}
+  egg:     {n:"Egg · 1 large",                 p:6,  l:0.5},
+  // Lean animal protein — small ~2 oz cooked portions as efficient leucine bumps (≈8% leucine),
+  // not a heaping serving. A couple ounces clears most plant feedings over the line.
+  chicken: {n:"Chicken breast · 2 oz",          p:17, l:1.4},
+  turkey:  {n:"Turkey breast · 2 oz",           p:17, l:1.4},
+  salmon:  {n:"Salmon · 2 oz",                  p:14, l:1.1},
+  whitefish:{n:"White fish (cod/tilapia) · 2 oz",p:14, l:1.1},
+  tuna:    {n:"Tuna, canned · 2 oz",            p:14, l:1.1},
+  leanbeef:{n:"Lean beef · 2 oz",               p:15, l:1.2},
+  shrimp:  {n:"Shrimp · 2 oz",                  p:12, l:0.95},
+  // Veggies — residual protein only. NOT a protein base: too little leucine to clear a feeding alone.
+  peas:    {n:"Green peas · 1 cup",             p:8,  l:0.6},
+  veg:     {n:"Non-starchy veg · serving",      p:2,  l:0.1}
 };
+
+// Dropdown grouping — makes it explicit that veggies are residual extras, not her protein base.
+const CATS = [
+  {label:'Protein powder / shake',                       keys:['whey','pearice','soyiso','soymilk']},
+  {label:'Animal protein · ~2 oz (small leucine bump)',  keys:['chicken','turkey','salmon','whitefish','tuna','leanbeef','shrimp','egg']},
+  {label:'Soy & legumes (plant base)',                   keys:['tofu','tempeh','edamame','lentils','black','chick']},
+  {label:'Dairy',                                        keys:['greek','cottage','milk','soyyog']},
+  {label:'Grains & seeds',                               keys:['quinoa','hemp','pumpkin','nutyeast']},
+  {label:'Veggies & extras — residual, NOT a base',      keys:['peas','veg','banana']},
+  {label:'Other',                                        keys:['gummies','bonebroth']}
+];
 
 const THRESHOLD = 2.5;   // leucine "switch" line
 const LMAX = 3.5;        // meter ceiling
@@ -761,7 +784,11 @@ function tick(now){
 }
 
 function optionsHTML(){
-  return Object.keys(DB).map(k=>`<option value="${k}">${DB[k].n}  (+${DB[k].p}g P / ${DB[k].l}g L)</option>`).join('');
+  return CATS.map(c=>{
+    const opts = c.keys.filter(k=>DB[k]).map(k=>
+      `<option value="${k}">${DB[k].n}  (+${DB[k].p}g P / ${DB[k].l}g L)</option>`).join('');
+    return opts ? `<optgroup label="${c.label}">${opts}</optgroup>` : '';
+  }).join('');
 }
 
 function render(){
